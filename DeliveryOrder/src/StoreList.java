@@ -24,7 +24,7 @@ public class StoreList {
 //        foodField.setEditable(false); // 나중에 데이터베이스와 연결될 부분이므로, 현재는 비활성화
 
         topPanel.add(foodLabel);
-//        topPanel.add(foodField);
+//      topPanel.add(foodField);
 
         DefaultListModel<String> storeListModel = new DefaultListModel<>();
         JList<String> storeList = new JList<>(storeListModel);
