@@ -21,7 +21,6 @@ public class StoreMain {
         tabbedPane.addTab("메뉴 수정", createMenuEditPanel());
         tabbedPane.addTab("주문 현황", createOrderPanel());
         tabbedPane.addTab("가게 정보", createInfoPanel());
-        tabbedPane.addTab("1:1 문의", createInquiryPanel());
 
         // 메인 프레임 구성
         frame.add(topPanel, BorderLayout.NORTH);
@@ -92,13 +91,6 @@ public class StoreMain {
     private static JPanel createInfoPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new JLabel("가게 정보 화면", SwingConstants.CENTER), BorderLayout.CENTER);
-        return panel;
-    }
-    
-    // 1:1 문의 사항 패널
-    private static JPanel createInquiryPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel("1:1 문의 사항 화면", SwingConstants.CENTER), BorderLayout.CENTER);
         return panel;
     }
 }
