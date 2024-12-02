@@ -26,20 +26,20 @@ public class StoreRegister extends JFrame {
         formPanel.setLayout(new GridLayout(6, 2, 10, 10));
 
         formPanel.add(new JLabel("이름: "));
-        nameField = createFixedSizeTextField();
+        nameField = FixedTextField();
         formPanel.add(nameField);
 
         formPanel.add(new JLabel("가게 이름: "));
-        SnameField = createFixedSizeTextField();
+        SnameField = FixedTextField();
         formPanel.add(SnameField);
 
         formPanel.add(new JLabel("비밀번호: "));
-        pwdField = createFixedSizePasswordField();
+        pwdField = FixedPwdField();
         formPanel.add(pwdField);
 
         formPanel.add(new JLabel("비밀번호 확인: "));
         JPanel confirmPanel = new JPanel(new BorderLayout());
-        confirmPwdField = createFixedSizePasswordField();
+        confirmPwdField = FixedPwdField();
         JButton confirmButton = new JButton("확인");
         confirmButton.addActionListener(new CheckPasswordListener());
         confirmPanel.add(confirmPwdField, BorderLayout.CENTER);
@@ -47,30 +47,30 @@ public class StoreRegister extends JFrame {
         formPanel.add(confirmPanel);
 
         formPanel.add(new JLabel("가게 주소: "));
-        addField = createFixedSizeTextField();
+        addField = FixedTextField();
         formPanel.add(addField);
 
         c.add(formPanel, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel();
-        JButton signupButton = new JButton("회원가입");
-        signupButton.addActionListener(new SignupButtonListener());
-        buttonPanel.add(signupButton);
+        JPanel btnPanel = new JPanel();
+        JButton signupBtn = new JButton("회원가입");
+        signupBtn.addActionListener(new SignupButtonListener());
+        btnPanel.add(signupBtn);
 
-        c.add(buttonPanel, BorderLayout.SOUTH);
+        c.add(btnPanel, BorderLayout.SOUTH);
 
         setSize(450, 400);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private JTextField createFixedSizeTextField() {
+    private JTextField FixedTextField() {
         JTextField textField = new JTextField();
         textField.setPreferredSize(new Dimension(150, 25));
         return textField;
     }
 
-    private JPasswordField createFixedSizePasswordField() {
+    private JPasswordField FixedPwdField() {
         JPasswordField pwdField = new JPasswordField();
         pwdField.setPreferredSize(new Dimension(150, 25));
         return pwdField;
@@ -80,9 +80,9 @@ public class StoreRegister extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             String pwd = new String(pwdField.getPassword());
-            String confirmPassword = new String(confirmPwdField.getPassword());
+            String confirmPwd = new String(confirmPwdField.getPassword());
 
-            if (pwd.equals(confirmPassword)) {
+            if (pwd.equals(confirmPwd)) {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치합니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
