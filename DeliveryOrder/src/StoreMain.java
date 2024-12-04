@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StoreMain {
-    public static void main(String[] args) {
+    public StoreMain() {
         JFrame frame = new JFrame("가게 계정 메인 페이지");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -92,5 +92,8 @@ public class StoreMain {
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new JLabel("가게 정보 화면", SwingConstants.CENTER), BorderLayout.CENTER);
         return panel;
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(StoreMain::new);
     }
 }

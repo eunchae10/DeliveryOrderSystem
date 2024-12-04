@@ -4,16 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StoreRegister extends JFrame {
-    private JTextField nameField, SnameField, addField;
+    private JTextField nameField, SnameField, addField, idField;
     private JPasswordField pwdField, confirmPwdField;
+    private JComboBox<String> typeComboBox;
 
     public StoreRegister() {
         setTitle("가게 회원가입");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Container c = getContentPane();
         c.setLayout(new BorderLayout(10, 10));
 
+        // 상단 제목 패널
         JPanel titlePanel = new JPanel(new BorderLayout());
         JLabel textLabel = new JLabel("가게 회원가입", JLabel.CENTER);
         textLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
@@ -22,16 +24,13 @@ public class StoreRegister extends JFrame {
         titlePanel.setBackground(Color.LIGHT_GRAY);
         c.add(titlePanel, BorderLayout.NORTH);
 
+        // 입력 폼 패널
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(6, 2, 10, 10));
+        formPanel.setLayout(new GridLayout(7, 2, 10, 10)); // 7행 2열로 변경
 
-        formPanel.add(new JLabel("이름: "));
-        nameField = FixedTextField();
-        formPanel.add(nameField);
-
-        formPanel.add(new JLabel("가게 이름: "));
-        SnameField = FixedTextField();
-        formPanel.add(SnameField);
+        formPanel.add(new JLabel("아이디: "));
+        idField = FixedTextField();
+        formPanel.add(idField);
 
         formPanel.add(new JLabel("비밀번호: "));
         pwdField = FixedPwdField();
@@ -50,8 +49,24 @@ public class StoreRegister extends JFrame {
         addField = FixedTextField();
         formPanel.add(addField);
 
+        formPanel.add(new JLabel("이름: "));
+        nameField = FixedTextField();
+        formPanel.add(nameField);
+
+        formPanel.add(new JLabel("가게 이름: "));
+        SnameField = FixedTextField();
+        formPanel.add(SnameField);
+
+        // JComboBox 추가
+        formPanel.add(new JLabel("카테고리: "));
+        String[] businessTypes = {"치킨", "피자", "중국집", "찜", "분식", "족발보쌈", "한식", "햄버거"};
+        typeComboBox = new JComboBox<>(businessTypes);
+        typeComboBox.setPreferredSize(new Dimension(150, 25));
+        formPanel.add(typeComboBox);
+
         c.add(formPanel, BorderLayout.CENTER);
 
+        // 하단 버튼 패널
         JPanel btnPanel = new JPanel();
         JButton signupBtn = new JButton("회원가입");
         signupBtn.addActionListener(new SignupButtonListener());
@@ -59,7 +74,7 @@ public class StoreRegister extends JFrame {
 
         c.add(btnPanel, BorderLayout.SOUTH);
 
-        setSize(450, 400);
+        setSize(500, 450);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -93,10 +108,10 @@ public class StoreRegister extends JFrame {
     private class SignupButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // 모든 필드가 입력되었는지 확인
-            if (nameField.getText().isEmpty() || SnameField.getText().isEmpty() || 
-            	addField.getText().isEmpty() || pwdField.getPassword().length == 0 ||
-                confirmPwdField.getPassword().length == 0) {
+            // 모든 필드와 선택 값 확인
+            if (nameField.getText().isEmpty() || SnameField.getText().isEmpty() ||
+                addField.getText().isEmpty() || pwdField.getPassword().length == 0 ||
+                confirmPwdField.getPassword().length == 0 || typeComboBox.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(null, "정보 입력을 완료해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
             } else {
                 // 비밀번호와 비밀번호 확인 값 비교
@@ -104,8 +119,10 @@ public class StoreRegister extends JFrame {
                 String confirmPwd = new String(confirmPwdField.getPassword());
 
                 if (pwd.equals(confirmPwd)) {
-                    JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0); // 창 종료
+                    String selectedType = (String) typeComboBox.getSelectedItem();
+                    JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.\n선택한 사업 유형: " + selectedType,
+                            "확인", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }

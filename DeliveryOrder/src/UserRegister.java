@@ -9,7 +9,7 @@ public class UserRegister extends JFrame {
 
     public UserRegister() {
         setTitle("사용자 회원가입");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Container c = getContentPane();
         c.setLayout(new BorderLayout(10, 10));
@@ -105,7 +105,7 @@ public class UserRegister extends JFrame {
 
                 if (pwd.equals(confirmPwd)) {
                     JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0); // 창 종료
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }

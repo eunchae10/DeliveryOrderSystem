@@ -1,45 +1,63 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class StoreList {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new StoreList().createAndShowGUI());
+    public StoreList(String category) {
+        SwingUtilities.invokeLater(() -> createAndShowGUI(category));
     }
 
-    private void createAndShowGUI() {
-        JFrame frame = new JFrame("가게 리스트");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private void createAndShowGUI(String category) {
+        JFrame frame = new JFrame(category + " 가게 리스트");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 600);
         frame.setLayout(new BorderLayout());
-        
-        JPanel containerPanel = new JPanel();
-        containerPanel.setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout());
-        
-        JLabel foodLabel = new JLabel("음식 이름");
-        foodLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
-//        JTextField foodField = new JTextField(20); // 음식 이름 입력 필드
-//        foodField.setEditable(false); // 나중에 데이터베이스와 연결될 부분이므로, 현재는 비활성화
+        JLabel titleLabel = new JLabel(category + " 가게 리스트", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        frame.add(titleLabel, BorderLayout.NORTH);
 
-        topPanel.add(foodLabel);
-//      topPanel.add(foodField);
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(Color.WHITE);
 
-        DefaultListModel<String> storeListModel = new DefaultListModel<>();
-        JList<String> storeList = new JList<>(storeListModel);
-        JScrollPane scrollPane = new JScrollPane(storeList);
-        
-        // 추후에 데이터베이스 연동 후 변경될 내용
-        storeListModel.addElement("교촌치킨");
-        storeListModel.addElement("BHC 치킨");
-        storeListModel.addElement("60계 치킨");
+        ArrayList<String> stores = getStoresForCategory(category);
 
-        containerPanel.add(topPanel, BorderLayout.NORTH);
-        containerPanel.add(scrollPane, BorderLayout.CENTER);
+        for (String store : stores) {
+            JPanel storePanel = new JPanel(new BorderLayout());
+            storePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+            storePanel.setBackground(Color.WHITE);
 
-        frame.add(containerPanel, BorderLayout.CENTER);
+            JLabel storeLabel = new JLabel(store, SwingConstants.CENTER);
+            storeLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+            storePanel.add(storeLabel, BorderLayout.CENTER);
+
+            listPanel.add(storePanel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
+    }
+
+    private ArrayList<String> getStoresForCategory(String category) {
+        ArrayList<String> stores = new ArrayList<>();
+        switch (category) {
+            case "치킨":
+                stores.add("교촌치킨");
+                stores.add("BHC치킨");
+                stores.add("BBQ치킨");
+                break;
+            case "피자":
+                stores.add("피자헛");
+                stores.add("도미노피자");
+                stores.add("파파존스");
+                break;
+            // 다른 카테고리 추가
+            default:
+                stores.add("가게 리스트 없음");
+        }
+        return stores;
     }
 }

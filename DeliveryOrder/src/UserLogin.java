@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 public class UserLogin extends JFrame {
     private JTextField idField;
     private JPasswordField pwdField;
+    private HomeMain parentPage;
 
-    public UserLogin() {
+    public UserLogin(HomeMain parentPage) {
+    	this.parentPage = parentPage;
         setTitle("사용자 로그인");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Container c = getContentPane();
         c.setLayout(new BorderLayout(10, 10));
@@ -62,21 +64,26 @@ public class UserLogin extends JFrame {
     private class LoginButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // 입력된 아이디와 비밀번호 확인
             String id = idField.getText();
             String pwd = new String(pwdField.getPassword());
 
             if (id.isEmpty() || pwd.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 모두 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력하세요.", "오류", JOptionPane.ERROR_MESSAGE);
             } else {
-                // 로그인 성공 처리 (현재는 단순히 팝업만 표시)
                 JOptionPane.showMessageDialog(null, "로그인 성공!", "확인", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
+                
+                // 부모 창 닫기
+                if (parentPage != null) {
+                    parentPage.dispose();
+                }
+
+                dispose(); // 현재 로그인 창 닫기
+                SwingUtilities.invokeLater(() -> UserMain.main(new String[]{})); // UserMain 창 열기
             }
         }
     }
 
     public static void main(String[] args) {
-        new UserLogin();
+        new UserLogin(null);
     }
 }

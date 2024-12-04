@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class myAccount {
-    public static void main(String[] args) {
+    public void showMyAccountWindow() {
         JFrame frame = new JFrame("구매 내역");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
         frame.setLayout(new BorderLayout());
 
@@ -27,13 +27,8 @@ public class myAccount {
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        // 홈 버튼 클릭 시 동작 정의
-        homeBtn.addActionListener(e -> {
-            System.out.println("홈 버튼 클릭, 메인 페이지로 돌아감");
-            frame.dispose();
-            // 메인 페이지 클래스를 호출 -> 추가 구현 필요
-        });
-
+        homeBtn.addActionListener(e -> frame.dispose());
+        
         frame.setVisible(true);
     }
 }

@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 public class StoreLogin extends JFrame {
     private JTextField idField;
     private JPasswordField pwdField;
+    private HomeMain parentPage;
 
-    public StoreLogin() {
+    public StoreLogin(HomeMain parentPage) {
+    	this.parentPage = parentPage;
         setTitle("가게 로그인");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Container c = getContentPane();
         c.setLayout(new BorderLayout(10, 10));
@@ -71,12 +73,16 @@ public class StoreLogin extends JFrame {
             } else {
                 // 로그인 성공 처리 (현재는 단순히 팝업만 표시)
                 JOptionPane.showMessageDialog(null, "로그인 성공!", "확인", JOptionPane.INFORMATION_MESSAGE);
+                if (parentPage != null) {
+                	parentPage.dispose();
+                }
                 dispose();
+                SwingUtilities.invokeLater(StoreMain::new);
             }
         }
     }
 
     public static void main(String[] args) {
-        new StoreLogin();
+        new StoreLogin(null);
     }
 }
