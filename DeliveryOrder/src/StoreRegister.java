@@ -8,7 +8,7 @@ public class StoreRegister extends JFrame {
     private JPasswordField pwdField, confirmPwdField;
 
     public StoreRegister() {
-        setTitle("사용자 회원가입");
+        setTitle("가게 회원가입");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container c = getContentPane();
