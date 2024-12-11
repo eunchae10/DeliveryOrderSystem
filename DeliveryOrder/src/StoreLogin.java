@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 public class StoreLogin extends JFrame {
     private JTextField idField;
     private JPasswordField pwdField;
-    private HomeMain parentPage;
+    private LoginSignupPage parentPage;
+    DTBL d = new DTBL(); // DTBL 클래스에서 userid 설정
 
-    public StoreLogin(HomeMain parentPage) {
-    	this.parentPage = parentPage;
+    public StoreLogin(LoginSignupPage parentPage) {
+        this.parentPage = parentPage;
+
         setTitle("가게 로그인");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -20,7 +22,6 @@ public class StoreLogin extends JFrame {
         JLabel textLabel = new JLabel("가게 로그인", JLabel.CENTER);
         textLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
         titlePanel.add(textLabel, BorderLayout.CENTER);
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         titlePanel.setBackground(Color.LIGHT_GRAY);
         c.add(titlePanel, BorderLayout.NORTH);
 
@@ -28,11 +29,11 @@ public class StoreLogin extends JFrame {
         formPanel.setLayout(new GridLayout(2, 2, 10, 10));
 
         formPanel.add(new JLabel("아이디: "));
-        idField = FixedTextField();
+        idField = new JTextField();
         formPanel.add(idField);
 
         formPanel.add(new JLabel("비밀번호: "));
-        pwdField = FixedPwdField();
+        pwdField = new JPasswordField();
         formPanel.add(pwdField);
 
         c.add(formPanel, BorderLayout.CENTER);
@@ -45,44 +46,51 @@ public class StoreLogin extends JFrame {
         c.add(btnPanel, BorderLayout.SOUTH);
 
         setSize(350, 250);
-        setLocationRelativeTo(null); // 화면 중앙
+        setLocationRelativeTo(null);
         setVisible(true);
     }
-    
-    private JTextField FixedTextField() {
-        JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(130, 18));
-        return textField;
-    }
 
-    private JPasswordField FixedPwdField() {
-        JPasswordField pwdField = new JPasswordField();
-        pwdField.setPreferredSize(new Dimension(130, 18));
-        return pwdField;
-    }
+    public StoreLogin(HomeMain homeMain) {
+		// TODO Auto-generated constructor stub
+	}
 
-    private class LoginButtonListener implements ActionListener {
+	private class LoginButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // 입력된 아이디와 비밀번호 확인
-            String id = idField.getText();
-            String pwd = new String(pwdField.getPassword());
+            String id = idField.getText().trim();
+            String pwd = new String(pwdField.getPassword()).trim();
+
+            login l = new login();
+            int num = l.LoginOwner(id, pwd);
 
             if (id.isEmpty() || pwd.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 모두 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
             } else {
-                // 로그인 성공 처리 (현재는 단순히 팝업만 표시)
-                JOptionPane.showMessageDialog(null, "로그인 성공!", "확인", JOptionPane.INFORMATION_MESSAGE);
-                if (parentPage != null) {
-                	parentPage.dispose();
+                if (num == 0) {
+                    if ("admin".equals(id)) { // admin ID 체크
+                        JOptionPane.showMessageDialog(null, "관리자 로그인 성공!", "확인", JOptionPane.INFORMATION_MESSAGE);
+                        dispose(); // 현재 로그인 창 닫기
+                        SwingUtilities.invokeLater(() -> AdminMain.main(new String[]{})); // AdminMain 실행
+                    } else {
+                        JOptionPane.showMessageDialog(null, "로그인 성공!", "확인", JOptionPane.INFORMATION_MESSAGE);
+                        d.setUserid(id); // 성공한 사용자의 ID 설정
+                        if (parentPage != null) {
+                            parentPage.dispose(); // 부모 창 닫기
+                        }
+                        dispose(); // 현재 로그인 창 닫기
+
+                        // StoreMain 실행, id 전달
+                        SwingUtilities.invokeLater(() -> new StoreMain(id));
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
-                dispose();
-                SwingUtilities.invokeLater(StoreMain::new);
             }
         }
     }
 
+
     public static void main(String[] args) {
-        new StoreLogin(null);
+    	new StoreLogin((LoginSignupPage) null); // 테스트용
     }
 }

@@ -2,11 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StoreRegister extends JFrame {
     private JTextField nameField, SnameField, addField, idField;
     private JPasswordField pwdField, confirmPwdField;
     private JComboBox<String> typeComboBox;
+    private boolean checkPw = false;
 
     public StoreRegister() {
         setTitle("가게 회원가입");
@@ -99,6 +102,7 @@ public class StoreRegister extends JFrame {
 
             if (pwd.equals(confirmPwd)) {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치합니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
+                checkPw = true;
             } else {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
             }
@@ -109,22 +113,30 @@ public class StoreRegister extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // 모든 필드와 선택 값 확인
-            if (nameField.getText().isEmpty() || SnameField.getText().isEmpty() ||
-                addField.getText().isEmpty() || pwdField.getPassword().length == 0 ||
-                confirmPwdField.getPassword().length == 0 || typeComboBox.getSelectedItem() == null) {
-                JOptionPane.showMessageDialog(null, "정보 입력을 완료해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+        	if (idField.getText().isEmpty() || nameField.getText().isEmpty() || 
+            		SnameField.getText().isEmpty() || addField.getText().isEmpty() || 
+            		pwdField.getPassword().length == 0 || confirmPwdField.getPassword().length == 0 ||
+            		typeComboBox.getSelectedItem() == null) {
+                    JOptionPane.showMessageDialog(null, "정보 입력을 완료해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
             } else {
                 // 비밀번호와 비밀번호 확인 값 비교
                 String pwd = new String(pwdField.getPassword());
                 String confirmPwd = new String(confirmPwdField.getPassword());
 
-                if (pwd.equals(confirmPwd)) {
-                    String selectedType = (String) typeComboBox.getSelectedItem();
-                    JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.\n선택한 사업 유형: " + selectedType,
-                            "확인", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                if (checkPw) {
+                	List<String> owner = new ArrayList<>();
+                	owner.add(idField.getText());
+                	owner.add(pwd);
+                	owner.add(addField.getText());
+                	owner.add(nameField.getText());
+                	owner.add(SnameField.getText());
+                	owner.add((String)typeComboBox.getSelectedItem());
+                	
+                	if(Insert.OwnerLoginSingup(owner))
+                    JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
+                	dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "비밀번호 일치 확인이 필요합니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

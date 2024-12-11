@@ -2,10 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRegister extends JFrame {
     private JTextField nameField, idField, addField;
     private JPasswordField pwdField, confirmPwdField;
+    private boolean checkPw = false;
 
     public UserRegister() {
         setTitle("사용자 회원가입");
@@ -84,6 +87,7 @@ public class UserRegister extends JFrame {
 
             if (pwd.equals(confirmPwd)) {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치합니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
+                checkPw = true;
             } else {
                 JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
             }
@@ -94,20 +98,26 @@ public class UserRegister extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // 모든 필드가 입력되었는지 확인
-            if (nameField.getText().isEmpty() || idField.getText().isEmpty() || 
+        	if (nameField.getText().isEmpty() || idField.getText().isEmpty() || 
             	addField.getText().isEmpty() || pwdField.getPassword().length == 0 ||
                 confirmPwdField.getPassword().length == 0) {
                 JOptionPane.showMessageDialog(null, "정보 입력을 완료해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
             } else {
                 // 비밀번호와 비밀번호 확인 값 비교
                 String pwd = new String(pwdField.getPassword());
-                String confirmPwd = new String(confirmPwdField.getPassword());
-
-                if (pwd.equals(confirmPwd)) {
+                
+                if (checkPw) {
+                	List<String> user = new ArrayList<>();
+                	user.add(idField.getText());
+                	user.add(pwd);
+                	user.add(nameField.getText());
+                	user.add(addField.getText());
+                	
+                	if(Insert.UserLoginSingup(user))
                     JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                	dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "비밀번호 일치 확인이 필요합니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
